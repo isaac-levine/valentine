@@ -18,6 +18,9 @@ export async function sendValentineEmail(formData: FormData) {
         <p>You've received a special message:</p>
         <p>${message}</p>
         <p>Will you be my Valentine?</p>
+        <p style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+          Sent with <a href="https://sendavalentine.vercel.app" style="color: #ff69b4; text-decoration: none;">sendavalentine.vercel.app</a>
+        </p>
       `,
   });
 
