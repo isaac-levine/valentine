@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,30 +13,29 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { sendValentineEmail } from "./actions";
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button
+      type="submit"
+      className="w-full bg-pink-600 hover:bg-pink-700"
+      disabled={pending}
+    >
+      {pending ? "Sending..." : "Send Valentine"}
+    </Button>
+  );
+}
 
 export default function ValentineEmailForm() {
-  const [formData, setFormData] = useState({
-    recipientEmail: "",
-    recipientName: "",
-    message: "",
-  });
+  const [message, setMessage] = useState("");
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form data:", formData);
-    // Here you would typically send the data to your backend
-    alert("Valentine email sent! (Just kidding, check the console)");
-  };
+  async function handleSubmit(formData: FormData) {
+    const result = await sendValentineEmail(formData);
+    setMessage(result.message);
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-pink-50">
@@ -48,7 +48,7 @@ export default function ValentineEmailForm() {
             Fill out this form to send a Valentine&apos;s Day email
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
+        <form action={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <label
@@ -62,8 +62,6 @@ export default function ValentineEmailForm() {
                 id="recipientEmail"
                 name="recipientEmail"
                 placeholder="valentine@example.com"
-                value={formData.recipientEmail}
-                onChange={handleChange}
                 required
               />
             </div>
@@ -79,8 +77,6 @@ export default function ValentineEmailForm() {
                 id="recipientName"
                 name="recipientName"
                 placeholder="Your Valentine"
-                value={formData.recipientName}
-                onChange={handleChange}
                 required
               />
             </div>
@@ -95,19 +91,23 @@ export default function ValentineEmailForm() {
                 id="message"
                 name="message"
                 placeholder="Write your sweet message here..."
-                value={formData.message}
-                onChange={handleChange}
                 required
               />
             </div>
           </CardContent>
-          <CardFooter>
-            <Button
-              type="submit"
-              className="w-full bg-pink-600 hover:bg-pink-700"
-            >
-              Send Valentine
-            </Button>
+          <CardFooter className="flex flex-col space-y-4">
+            <SubmitButton />
+            {message && (
+              <p
+                className={`text-sm ${
+                  message.includes("successfully")
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {message}
+              </p>
+            )}
           </CardFooter>
         </form>
       </Card>
