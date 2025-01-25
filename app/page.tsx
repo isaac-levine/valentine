@@ -45,7 +45,7 @@ export default function ValentineEmailForm() {
             Send a Valentine
           </CardTitle>
           <CardDescription>
-            Fill out this form to send a Valentine's Day email
+            Fill out this form to send a Valentine&apos;s Day email
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
@@ -55,7 +55,7 @@ export default function ValentineEmailForm() {
                 htmlFor="recipientEmail"
                 className="text-sm font-medium text-gray-700"
               >
-                Recipient's Email
+                Recipient&apos;s Email
               </label>
               <Input
                 type="email"
@@ -72,7 +72,7 @@ export default function ValentineEmailForm() {
                 htmlFor="recipientName"
                 className="text-sm font-medium text-gray-700"
               >
-                Recipient's Name
+                Recipient&apos;s Name
               </label>
               <Input
                 type="text"
